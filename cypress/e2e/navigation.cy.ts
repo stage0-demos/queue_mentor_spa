@@ -4,53 +4,64 @@ describe('Navigation Drawer', () => {
   })
 
   it('should open navigation drawer with hamburger menu', () => {
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+    cy.visit('/resources')
     cy.get('[data-automation-id="nav-drawer-toggle"]').should('be.visible')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
     // Check that drawer is visible with domain sections
-    {%- for item in service.data_domains.controls %}
-    cy.contains('{{ item | upper }} DOMAIN').should('be.exist')
-    {%- endfor %}
-    {%- for item in service.data_domains.creates %}
-    cy.contains('{{ item | upper }} DOMAIN').should('be.exist')
-    {%- endfor %}
-    {%- for item in service.data_domains.consumes %}
-    cy.contains('{{ item | upper }} DOMAIN').should('be.exist')
-    {%- endfor %}
+    cy.contains('RESOURCE DOMAIN').should('be.exist')
+    cy.contains('PATH DOMAIN').should('be.exist')
+    cy.contains('PLAN DOMAIN').should('be.exist')
+    cy.contains('ENCOUNTER DOMAIN').should('be.exist')
+    cy.contains('EVENT DOMAIN').should('be.exist')
+    cy.contains('PROFILE DOMAIN').should('be.exist')
   })
-
-  {%- for item in service.data_domains.controls %}
-  it('should have all {{ item | lower }} domain links in drawer', () => {
-    cy.visit('/{{ item | lower }}s')
+  it('should have all resource domain links in drawer', () => {
+    cy.visit('/resources')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
-    cy.get('[data-automation-id="nav-{{ item | lower }}s-list-link"]').should('be.visible')
-    cy.get('[data-automation-id="nav-{{ item | lower }}s-new-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-resources-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-resources-new-link"]').should('be.visible')
   })
-  {%- endfor %}
-  {%- for item in service.data_domains.creates %}
-  it('should have all {{ item | lower }} domain links in drawer', () => {
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+  it('should have all path domain links in drawer', () => {
+    cy.visit('/paths')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
-    cy.get('[data-automation-id="nav-{{ item | lower }}s-list-link"]').should('be.visible')
-    cy.get('[data-automation-id="nav-{{ item | lower }}s-new-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-paths-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-paths-new-link"]').should('be.visible')
   })
-  {%- endfor %}
-  {%- for item in service.data_domains.consumes %}
-  it('should have {{ item | lower }} domain link in drawer', () => {
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+  it('should have all plan domain links in drawer', () => {
+    cy.visit('/plans')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
-    cy.get('[data-automation-id="nav-{{ item | lower }}s-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-plans-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-plans-new-link"]').should('be.visible')
   })
-  {%- endfor %}
+  it('should have all encounter domain links in drawer', () => {
+    cy.visit('/encounters')
+    cy.get('[data-automation-id="nav-drawer-toggle"]').click()
+    
+    cy.get('[data-automation-id="nav-encounters-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-encounters-new-link"]').should('be.visible')
+  })
+  it('should have all event domain links in drawer', () => {
+    cy.visit('/resources')
+    cy.get('[data-automation-id="nav-drawer-toggle"]').click()
+    
+    cy.get('[data-automation-id="nav-events-list-link"]').should('be.visible')
+    cy.get('[data-automation-id="nav-events-new-link"]').should('be.visible')
+  })
+  it('should have profile domain link in drawer', () => {
+    cy.visit('/resources')
+    cy.get('[data-automation-id="nav-drawer-toggle"]').click()
+    
+    cy.get('[data-automation-id="nav-profiles-list-link"]').should('be.visible')
+  })
 
   it('should have admin and logout at bottom of drawer', () => {
     // Login with admin role to see admin link
     cy.login(['admin'])
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+    cy.visit('/resources')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
     // Admin and Logout should be visible in the drawer
@@ -59,21 +70,21 @@ describe('Navigation Drawer', () => {
   })
 
   it('should navigate to different pages from drawer', () => {
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+    cy.visit('/resources')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
-    cy.get('[data-automation-id="nav-{{ service.data_domains.creates[0] | lower }}s-list-link"]').click()
-    cy.url().should('include', '/{{ service.data_domains.creates[0] | lower }}s')
+    cy.get('[data-automation-id="nav-events-list-link"]').click()
+    cy.url().should('include', '/events')
   })
 
   it('should close drawer after navigation', () => {
-    cy.visit('/{{ service.data_domains.controls[0] | lower }}s')
+    cy.visit('/resources')
     cy.get('[data-automation-id="nav-drawer-toggle"]').click()
     
-    cy.get('[data-automation-id="nav-{{ service.data_domains.creates[0] | lower }}s-list-link"]').click()
+    cy.get('[data-automation-id="nav-events-list-link"]').click()
     
     // Drawer should close after navigation (temporary drawer)
     cy.wait(500)
-    cy.contains('{{ service.data_domains.controls[0] | upper }} DOMAIN').should('not.be.visible')
+    cy.contains('RESOURCE DOMAIN').should('not.be.visible')
   })
 })
